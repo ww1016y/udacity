@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/nvidia/workspace/myrobot/script/hello.cpp" "/home/nvidia/workspace/myrobot/build/CMakeFiles/hello.dir/script/hello.cpp.o"
+  "/home/workspace/udacity/myrobot/script/hello.cpp" "/home/workspace/udacity/myrobot/build/CMakeFiles/hello.dir/script/hello.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/nvidia/workspace/myrobot
+# Install script for directory: /home/workspace/udacity/myrobot
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/nvidia/workspace/myrobot/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/workspace/udacity/myrobot/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

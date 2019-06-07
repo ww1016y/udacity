@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nvidia/workspace/myrobot
+CMAKE_SOURCE_DIR = /home/workspace/udacity/myrobot
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nvidia/workspace/myrobot/build
+CMAKE_BINARY_DIR = /home/workspace/udacity/myrobot/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/hello.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/hello.dir/flags.make
 
 CMakeFiles/hello.dir/script/hello.cpp.o: CMakeFiles/hello.dir/flags.make
 CMakeFiles/hello.dir/script/hello.cpp.o: ../script/hello.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nvidia/workspace/myrobot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hello.dir/script/hello.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hello.dir/script/hello.cpp.o -c /home/nvidia/workspace/myrobot/script/hello.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/workspace/udacity/myrobot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hello.dir/script/hello.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hello.dir/script/hello.cpp.o -c /home/workspace/udacity/myrobot/script/hello.cpp
 
 CMakeFiles/hello.dir/script/hello.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/hello.dir/script/hello.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nvidia/workspace/myrobot/script/hello.cpp > CMakeFiles/hello.dir/script/hello.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/workspace/udacity/myrobot/script/hello.cpp > CMakeFiles/hello.dir/script/hello.cpp.i
 
 CMakeFiles/hello.dir/script/hello.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/hello.dir/script/hello.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nvidia/workspace/myrobot/script/hello.cpp -o CMakeFiles/hello.dir/script/hello.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/workspace/udacity/myrobot/script/hello.cpp -o CMakeFiles/hello.dir/script/hello.cpp.s
 
 CMakeFiles/hello.dir/script/hello.cpp.o.requires:
 
@@ -90,64 +90,62 @@ hello_EXTERNAL_OBJECTS =
 
 libhello.so: CMakeFiles/hello.dir/script/hello.cpp.o
 libhello.so: CMakeFiles/hello.dir/build.make
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_client.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_gui.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_sensors.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_rendering.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_physics.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_ode.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_transport.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_msgs.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_util.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_common.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_gimpact.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_opcode.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_opende_ou.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_math.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libgazebo_ccd.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_thread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_signals.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_system.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_filesystem.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_program_options.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_regex.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_iostreams.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_date_time.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_chrono.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_atomic.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libpthread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libprotobuf.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libsdformat.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libignition-math2.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgreMain.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_thread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_date_time.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_system.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_atomic.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_chrono.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libpthread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgreTerrain.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgrePaging.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libignition-math2.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_thread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_signals.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_system.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_filesystem.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_program_options.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_regex.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_iostreams.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_date_time.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_chrono.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libboost_atomic.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libpthread.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libprotobuf.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libsdformat.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgreMain.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgreTerrain.so
-libhello.so: /usr/lib/aarch64-linux-gnu/libOgrePaging.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_client.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_gui.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_sensors.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_rendering.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_physics.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_ode.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_transport.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_msgs.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_util.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_common.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_gimpact.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_opcode.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_opende_ou.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_math.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libgazebo_ccd.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libignition-math2.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libignition-math2.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_iostreams.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libprotobuf.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libsdformat.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgreMain.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+libhello.so: /usr/lib/x86_64-linux-gnu/libOgrePaging.so
 libhello.so: CMakeFiles/hello.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nvidia/workspace/myrobot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libhello.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/workspace/udacity/myrobot/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libhello.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hello.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -164,6 +162,6 @@ CMakeFiles/hello.dir/clean:
 .PHONY : CMakeFiles/hello.dir/clean
 
 CMakeFiles/hello.dir/depend:
-	cd /home/nvidia/workspace/myrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nvidia/workspace/myrobot /home/nvidia/workspace/myrobot /home/nvidia/workspace/myrobot/build /home/nvidia/workspace/myrobot/build /home/nvidia/workspace/myrobot/build/CMakeFiles/hello.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/workspace/udacity/myrobot/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/workspace/udacity/myrobot /home/workspace/udacity/myrobot /home/workspace/udacity/myrobot/build /home/workspace/udacity/myrobot/build /home/workspace/udacity/myrobot/build/CMakeFiles/hello.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/hello.dir/depend
 
