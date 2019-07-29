@@ -3,84 +3,66 @@
 #include <queue>
 #include <string.h>
 #include <vector>
-#define W_MAX 12
-#define H_MAX 15
+#define MAX 100
 using namespace std;
-int map[H_MAX][W_MAX];
-int ex[H_MAX][W_MAX];
+int map[MAX][MAX];
 
+int dx[4] = {-1,1,0,0};
+int dy[4] = {0,0,-1,1};
+int N, M, K;
+vector<pair<int, int>> virus;
+vector<pair<int, int>> info;
 
-int N, W, H;
-
-void boom(int j, int i){
-
-	int x = j;
-	int y = i;
-
-	int until=ex[j][i];
-	ex[j][i] = 0;
-	for (int k = 0; k<4; k++){
-		for (int l =0; l<until-1; l++){
-			x = x + dx[k];
-			y = y + dy[k];
-			if (ex[x][y] > 0){
-				boom(x,y);
-			}
-
-		}
-	}
-}
-
-void rearrange(){
-
-	for (int i = 0; i < W; i++) {
-	    	for (int j = 0; j < H; j++) {
-			if ( ex[j][i] > 0) {
-				for (int k = j+1; k < H; k++) {
-					if ( ex[k][i] == 0) {
-						ex[k][i]  = ex[j][i];			
-					}	   
-				}   				
-			}			
-		}
-	}
-}
-
-void solve(int count, int temp[]){
-
-	if (count == 4) {
-
-		return;
-	}
-
-	for (int i = 0; i < W; i++) {
-	    	for (int j = 0; j < H; j++) {
-			if ( temp[j][i] > 0) {
-				
-				for (int a = 0; a < H; a++) {
-				    	for (int b = 0; b < W; b++) {
-						ex[i][j] = temp[a][b];	    
-					}
-				}
-				boom(j,i);
-
-				rearrange();
-			
-
-				for (int a = 0; a < H; a++) {
-				    	for (int b = 0; b < W; b++) {
-						temp[i][j] = ex[a][b];	    
-					}
-				}
-
-
-
-				solve(count+1,temp);
+void solve(){
 	
-			}	   
+	for (int m =0; m<M; m++) {
+		int map[MAX][MAX][4];
+		memset(map,0,sizeof(map));
+
+		for (int i = 0; i < K; i++) {
+			if (info[i].first == 0){
+				continue;
+			}
+			else {
+				int x = virus[i].first;
+				int y = virus[i].second;
+
+				x = x +dx[info[i].second-1];
+				y = y +dy[info[i].second-1];
+				virus[i].first = x;
+				virus[i].second = y;
+				if ( x == 0 || y == 0 || x == N-1 || y ==N-1) {
+					info[i].first = info[i].first/2;
+					if ( info[i].second == 1) info[i].second = 2;
+					else if ( info[i].second == 2) info[i].second = 1;
+					else if ( info[i].second == 3) info[i].second = 4;
+					else if ( info[i].second == 4) info[i].second = 3;
+				}
+				else {
+					map[x][y][0] = map[x][y][0] + 1;
+					map[x][y][1] = map[x][y][1] + info[i].first;
+					if (map[x][y][2]< info[i].first) {
+						map[x][y][2]= info[i].first;
+						map[x][y][3]= i;
+					}
+				}
+			}
+		}
+		for (int i = 0; i<N; i++){
+			for (int j = 0; j<N; j++){
+				if (map[i][j][0]>2){
+					for (int k = 0; k<K; k++){
+						if ( k == map[i][j][3]) { 
+							info[k].first = map[i][j][1];
+						}					
+						else if ( virus[k].first == virus[map[i][j][3]].first && virus[k].second == virus[map[i][j][3]].second ) {
+							info[k].first = 0;
+						}
+					}
+				}
+			}
 		}
 	}
-
 }
 
 int main() {
@@ -88,21 +70,24 @@ int main() {
     scanf("%d", &t);
     for (int tc = 1; tc <= t; tc++) {
         
-        scanf("%d %d %d", &N, &W, &H);
+        scanf("%d %d %d", &N, &M, &K);
 	
-	memset(map, 0, sizeof(map));
-	int temp[H_MAX][W_MAX];
+	int max_count =0; 
 
-	for (int i = 0; i < H; i++) {
-	    	for (int j = 0; j < W; j++) {
-			scanf("%d", &map[i][j]);
-			temp[i][j] = map[i][j];	    
-		}
+	for (int i = 0; i < K; i++) {
+		int a,b,c,d;
+	    	scanf("%d %d %d %d", &a, &b, &c, &d);
+		virus.push_back(make_pair(a,b));
+		info.push_back(make_pair(c,d));
 	}
 
-        solve(1,temp);
-
-        printf("#%d %d\n", tc, sum);
+        solve();
+	for (int i = 0; i < K; i++) {
+		max_count = max_count + info[i].first;
+	}
+	virus.clear();
+	info.clear();
+        printf("#%d %d", tc, max_count);
     }
 }
 
