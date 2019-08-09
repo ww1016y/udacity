@@ -4,96 +4,50 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
-#define H_MAX 15
-#define W_MAX 12
+#define MAX 16
 using namespace std;
-int map[H_MAX][W_MAX];
+int map[MAX][MAX];
+int visit[MAX];
+int N;
 
-int N, W, H;
+//int dx[4] = {0,1,0,-1};
+//int dy[4] = {1,0,-1,0};
+int ans;
 
-int dx[4] = {0,1,0,-1};
-int dy[4] = {1,0,-1,0};
-int min_count;
-
-void boom(int x, int y){
-
-	int re = map[x][y];
-	map[x][y] = 0;
-
-	for (int j = 1; j < re ; j++) {
-		for(int i = 0; i < 4; i++){
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx < 0 || ny < 0 || nx >= H || ny >= W || map[x][y] == 0){
-				continue;
-			}	
-			boom(nx,ny);		
-		}
-	}
-	return;
-}
-
-void remap(){
-
-	for (int j = 0; j < W; j++) {
-		queue<int> q;			
-		for (int i = H-1; i >= 0; i--) {			
-			if (map[i][j] > 0) {
-				q.push(map[i][j]);
-			}
-		}
-		int temp = q.size();
-		for (int k =H-1; k>=0; k--) {		
-			if (!q.empty()) {
-				map[k][j] = q.front();	
-				q.pop();
-			}
-			else {
-				map[k][j] = 0;
-			}
-		}				
-	}
-	return;
-}
-
-void solve(int num){
+void solve(int index, int count_num){
 	
-	if (num == N) {
-		int count =0;
-		for (int i = 0; i < H; i++) {
-			for (int j = 0; j < W; j++) {
-				if ( map[i][j] > 0) count = count +1;
-			}
-		}
-
-		if (count < min_count) min_count = count;
-		return;
-	}
-
-	for (int j = 0; j < W; j++) {
-		for (int i = 0; i < H; i++) {
-			if ( map[i][j] > 0) {
-				int tempmap[H_MAX][W_MAX];
-
-				for (int i = 0; i < H; i++) {
-					for (int j = 0; j < W; j++) {
-						tempmap[i][j] = map[i][j];
-					}
-				}
-
-				boom(i,j);
-				remap();
-				solve(num+1);
-
-				for (int i = 0; i < H; i++) {
-					for (int j = 0; j < W; j++) {
-						map[i][j] = tempmap[i][j];
+	if (index == N) {
+		int temp1 = 0;
+		int temp2 = 0;
+		int res = 0;
+		for (int i = 0; i < N; i++) {
+			if (visist[i] == 1) {
+				for (int j = 0; j < N; j++) {
+					if (visist[j] == 1) {
+						temp1 = temp1+ map[i][j];
 					}
 				}
 			}
+			else if (visist[i] == 0)  {
+				for (int j = 0; j < N; j++) {
+					if (visist[j] == 1) {
+						temp2 = temp2+ map[i][j];
+					}
+				}
+			}						
 		}
-	}
+		res = temp1 - temp2;
+		if (res < 0) res = -res;
+		if ( res < ans ) ans = res;
+	}	
 
+	if (count_num > 0) {
+		visit[index] = 1;
+		solve(index+1,count_num-1);
+		visit[index] = 0;
+	}
+	
+	solve(index+1,count_num);
 }
 
 int main() {
@@ -102,18 +56,18 @@ int main() {
     for (int tc = 1; tc <= t; tc++) {
         
 	memset(map,0,sizeof(map));
-	min_count =987654321; 
-        scanf("%d %d %d", &N, &W, &H);
+	ans =987654321; 
+        scanf("%d", &N);
 
-	for (int i = 0; i < H; i++) {
-		for (int j = 0; j < W; j++) {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
 			cin >> map[i][j];
 		}
 	}
 
-        solve(1);
+        solve(0,N/2);
 	
-        printf("#%d %d", tc, min_count);
+        printf("#%d %d", tc, ans);
     }
 }
 
