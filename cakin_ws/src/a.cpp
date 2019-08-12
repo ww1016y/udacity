@@ -4,50 +4,55 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
-#define MAX 16
+#define MAX 15
 using namespace std;
 int map[MAX][MAX];
-int visit[MAX];
-int N;
+int visit[MAX][MAX];
+int N, W, H;
 
-//int dx[4] = {0,1,0,-1};
-//int dy[4] = {1,0,-1,0};
+int dx[4] = {0,1,0,-1};
+int dy[4] = {1,0,-1,0};
 int ans;
 
-void solve(int index, int count_num){
+void solve(int a, int b, int val, int index){
 	
 	if (index == N) {
-		int temp1 = 0;
-		int temp2 = 0;
-		int res = 0;
-		for (int i = 0; i < N; i++) {
-			if (visist[i] == 1) {
-				for (int j = 0; j < N; j++) {
-					if (visist[j] == 1) {
-						temp1 = temp1+ map[i][j];
-					}
-				}
-			}
-			else if (visist[i] == 0)  {
-				for (int j = 0; j < N; j++) {
-					if (visist[j] == 1) {
-						temp2 = temp2+ map[i][j];
-					}
-				}
-			}						
-		}
-		res = temp1 - temp2;
-		if (res < 0) res = -res;
-		if ( res < ans ) ans = res;
-	}	
+		
 
-	if (count_num > 0) {
-		visit[index] = 1;
-		solve(index+1,count_num-1);
-		visit[index] = 0;
 	}
+
+	if (val == 1) {
+
+		;
+
+	}
+	else {
+		for (int i =0; i<4; i++){
+			for (int j = 1 ; j < val ; j++) {
+				int nx = a + j*dx[i];
+				int ny = b + j*dy[i];
+				if (nx<0 || ny < 0 || nx >= N || ny >= N || visit[nx][ny] != 0) continue;
+				boom(nx,ny);
+			}
+		}
+
+		remap();
+	}
+
 	
-	solve(index+1,count_num);
+
+	for (int i = 0; i < W; i++) {
+		for (int j = 0; j < H; j++) {
+			if (map[j][i] > 0) {
+				int temp = map[j][i];			
+				map[j][i] = 0;
+				solve(j,i,temp,0);
+				map[j][i] = temp;
+			}
+		}
+	}
+
+
 }
 
 int main() {
@@ -57,16 +62,25 @@ int main() {
         
 	memset(map,0,sizeof(map));
 	ans =987654321; 
-        scanf("%d", &N);
+        scanf("%d %d %d", &N, &W, &H);
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
+	for (int i = 0; i < H; i++) {
+		for (int j = 0; j < W; j++) {
 			cin >> map[i][j];
 		}
 	}
 
-        solve(0,N/2);
-	
+	for (int i = 0; i < W; i++) {
+		for (int j = 0; j < H; j++) {
+			if (map[j][i] > 0) {
+				int temp = map[j][i];			
+				map[j][i] = 0;
+				solve(j,i,temp,0);
+				map[j][i] = temp;
+			}
+		}
+	}
+        	
         printf("#%d %d", tc, ans);
     }
 }
