@@ -14,45 +14,82 @@ int dx[4] = {0,1,0,-1};
 int dy[4] = {1,0,-1,0};
 int ans;
 
-void solve(int a, int b, int val, int index){
-	
-	if (index == N) {
-		
+void remap(){
 
-	}
-
-	if (val == 1) {
-
-		;
-
-	}
-	else {
-		for (int i =0; i<4; i++){
-			for (int j = 1 ; j < val ; j++) {
-				int nx = a + j*dx[i];
-				int ny = b + j*dy[i];
-				if (nx<0 || ny < 0 || nx >= N || ny >= N || visit[nx][ny] != 0) continue;
-				boom(nx,ny);
-			}
+	for (int i = 0; i < W; i++) {
+		for (int j = H-1; j >=0; j--) {
+			if(map[j][i]>0) {
+				q.push(map[j][i]);
+			}			
+		}
+		for (int j = H-1; j >=0; j--) {
+			if (!q.empty()){
+				map[j][i] = q.front();	
+				q.pop();
+			}		
 		}
 
-		remap();
+	}
+}
+
+void boom(int x, int y){
+	int val = map[x][y];
+	map[x][y] = 0;
+	for (int i =0; i<4; i++){
+		for (int j = 1 ; j < val ; j++) {
+			int nx = x + j*dx[i];
+			int ny = y + j*dy[i];
+			if (nx<0 || ny < 0 || nx >= N || ny >= N || map[nx][ny] == 0) continue;
+			boom(nx,ny);
+		}
+	}
+}
+
+void solve(int index){
+	
+	int temp[MAX][MAX]= {0};
+
+	if (index == N) {
+		int count = 0;
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < W; j++) {
+				if (map[i][j] > 0) count = count + 1;
+			}
+		}
+		if (ans > count) ans = count;
+
 	}
 
-	
+	for (int i = 0; i < H; i++) {
+		for (int j = 0; j < W; j++) {
+			temp[i][j] = map[i][j];
+		}
+	}
 
 	for (int i = 0; i < W; i++) {
 		for (int j = 0; j < H; j++) {
-			if (map[j][i] > 0) {
-				int temp = map[j][i];			
+			if (map[j][i] == 1) {
 				map[j][i] = 0;
-				solve(j,i,temp,0);
-				map[j][i] = temp;
-			}
+				solve(index+1);
+				for (int i = 0; i < H; i++) {
+					for (int j = 0; j < W; j++) {
+						map[i][j] = temp[i][j];
+					}
+				}
+			}				
+			else if (map[j][i] > 1) {
+				boom(j,i);
+				remap();
+				solve(index+1);
+
+				for (int i = 0; i < H; i++) {
+					for (int j = 0; j < W; j++) {
+						map[i][j] = temp[i][j];
+					}
+				}
+			}			
 		}
 	}
-
-
 }
 
 int main() {
@@ -70,16 +107,7 @@ int main() {
 		}
 	}
 
-	for (int i = 0; i < W; i++) {
-		for (int j = 0; j < H; j++) {
-			if (map[j][i] > 0) {
-				int temp = map[j][i];			
-				map[j][i] = 0;
-				solve(j,i,temp,0);
-				map[j][i] = temp;
-			}
-		}
-	}
+	solve(0);
         	
         printf("#%d %d", tc, ans);
     }
