@@ -1,96 +1,161 @@
+//미네랄 2933
 #include <stdio.h>
 #include <iostream>
 #include <queue>
 #include <string.h>
 #include <vector>
 #include <algorithm>
-#define MAX 100
+#define MAX 101
 using namespace std;
-int map[MAX][MAX][2];
-int visit[MAX][MAX];
-int N, M, K;
-
-int dx[4] = {1,-1,0,0}; // 1,2,3,4 상 하 좌 우
-int dy[4] = {0,0,-1,1};
+int map[MAX][MAX];
+int R, C, N;
+int mineral[MAX];
+int dx[4] = {0,1,0,-1}; // 1,2,3,4 상 하 좌 우
+int dy[4] = {1,0,-1,0};
 int ans;
-vector <pair<int, int>> d;
-vector <pair<int, int>> vir;
+int num[6];
+int v[6][4];
 
-void solve(int index){
+void solve(){
 
-	if (index == M) {
-
-
-		return;
-	}
-
-	for (int k = 0; k < K; k++) {
-
-		if (d[k].front().first != 0) {
-			int x = vir[k].front().first;
-			int y = vir[k].front().second;
-			
-			int nx = x + dx[d[k].front().second-1];
-			int ny = y + dy[d[k].front().second-1];
-			if (nx == 0 || ny == 0 || nx == N -1 || ny == N-1){
-				d[k].front().first = d[k].front().first/2;
-				if (d[k].front().second == 1){
-					d[k].front().second = 2;
+	for (int index = 1; index<=N ; index++) {
+		if (index % 2 == 1) {
+			for (int j = 1; j <= C; j++) {
+				if (map[mineral[index]][j] == 1){
+					map[mineral[index]][j] = 0;
+					break;
 				}
-				else if (d[k].front().second == 2){
-					d[k].front().second = 1;
+				else continue;		
+			}	
+		}
+		else if (index % 2 == 0) {
+			for (int j = C; j >= 1; j--) {
+				if (map[mineral[index]][j] == 1){
+					map[mineral[index]][j] = 0;
+					break;
 				}
-				else if (d[k].front().second == 3){
-					d[k].front().second = 4;
+				else continue;		
+			}	
+		}
+		///////////////////////////////////////////
+		int visit[MAX][MAX] = {0};
+		int count = 0;
+		for (int i = 1; i <= R; i++) {
+			for (int j = 1; j <= C; j++) {
+				if (map[i][j] == 1 && visit[i][j] == 0) {
+					count = count + 1;
+					queue <pair<int, int>> q;
+					q.push(make_pair(i,j));
+					visit[i][j] = count;
+					while(!q.empty()){
+						int x = q.front().first;
+						int y = q.front().second;
+						q.pop();
+						for (int k = 0; k<4; k++){
+							int nx = x + dx[k];
+							int ny = y + dy[k];
+							if (nx < 1 || ny < 1 || nx > R || ny > C || map[nx][ny] == 0 || visit[nx][ny] != 0){
+								continue;
+							}
+							if (map[nx][ny] == 1 ){
+								q.push(make_pair(nx,ny));
+								visit[nx][ny] = count;
+							}
+						}
+					}			
 				}
-				else if (d[k].front().second == 4){
-					d[k].front().second = 3;
-				}
-			}
-			vir[k].front().first =nx;
-			vir[k].front().second =ny;
-			if (map[nx][ny][0] < d[k].front().first) {
-				map[nx][ny][0] = d[k].front().first;
-				map[nx][ny][1] = map[nx][ny][1]+ 1;
 			}
 		}
-	}
+		int check[100000]={0}; 
+		for (int j = 1; j <= C; j++) {
+			if (visit[1][j] != 0){
+				check[visit[1][j]] = 1;
+			}		
+		}
+		int point = 0;
+		for (int c = 1; c <= count ; c++){
+			if (check[visit[1][c]] == 0){
+				point = c;
+			}
+		}
 
-	for (int i = 0 ; i<N ; i++) {
-		for (int j = 0 ; j<N ; j++) {
-			if (map[i][j][1] > 1){
-				for (int k = 0; k < K; k++) {
-					if (vir[k].front().first == i && vir[k].front().second == j && map[i][j][0] != d[k].front().first) {
-						
+		int m[100000]= {0};
+		for (int j = 1; j <= C; j++) {
+			for (int i = R; i >= 1; i--) {
+				if (visit[i][j] == point){
+					 m[j]=i;
+					 break;
+					}
+				}
+		}
+
+		int change = 0;
+		int flag = 0;
+		for (int k = 1; k<=99 ; k--){
+			for (int j = 1; j <= C; j++) {	
+				if (m[j] > 0){
+					if (map[m[j]-k][j] == 0) flag = 0;
+					else {
+						flag = 1;
+						break;
+					}
+				}
+				else if (m[j]-k == 1){
+					if (map[m[j]-k][j] == 0) flag = 0;
+					else {
+						flag = 1;
+						break;
 					}
 				}
 			}
+	
+			if (flag ==1 ){
+				change = k-1;
+				break;
+			}	
+		}
+
+		for (int i = R; i >= 1; i--) {
+			for (int j = 1; j <= C; j++) {
+				if (visit[i][j] == point){
+					map[i-change][j] = map[i][j];
+				}
+			}
 		}
 	}
 
-
+	for (int i = 1; i <= R; i++) {
+		for (int j = 1; j <= C; j++) {
+			if (map[i][j] == 0) cout << '.';
+			else if (map[i][j] == 1) cout << 'x';
+		}
+		cout << '\n';
+	}
 }
 
 int main() {
-    int t;
-    scanf("%d", &t);
+    int t=1;
+    //scanf("%d", &t);
     for (int tc = 1; tc <= t; tc++) {
-        
-	memset(map,0,sizeof(map));
-	ans =0; 
-        scanf("%d %d %d", &N, &M, &K);
-
-	for (int i = 0; i < K; i++) {
-		int x,y,num,dir;
-		cin >> x >> y >> num >> dir;
-		//map[x][y][0] = num;
-		vir.push_back(make_pair(x,y));
-		d.push_back(make_pair(num,dir));
+	
+	ans = 0; 
+    scanf("%d %d", &R, &C);
+	
+	for (int i = R; i >= 1; i--) {
+		for (int j = 1; j <= C; j++) {
+			char a;
+			cin >> a;
+			if (a == '.') map[i][j] = 0;
+			if (a == 'x') map[i][j] = 1;
+		}
 	}
-
-	solve(0);
+	scanf("%d", &N);
+	for (int i = 1; i <= N; i++) {
+		cin >> mineral[i] ; 	
+	}
+	
+	solve();
         	
-        printf("#%d %d", tc, ans);
+   // printf("%d", ans);
     }
 }
-
