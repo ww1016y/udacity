@@ -37,6 +37,7 @@ void solve(){
 				else continue;		
 			}	
 		}
+
 		///////////////////////////////////////////
 		int visit[MAX][MAX] = {0};
 		int count = 0;
@@ -44,7 +45,7 @@ void solve(){
 			for (int j = 1; j <= C; j++) {
 				if (map[i][j] == 1 && visit[i][j] == 0) {
 					count = count + 1;
-					queue <pair<int, int>> q;
+					queue <pair<int, int> > q;
 					q.push(make_pair(i,j));
 					visit[i][j] = count;
 					while(!q.empty()){
@@ -66,67 +67,101 @@ void solve(){
 				}
 			}
 		}
-		int check[100000]={0}; 
-		for (int j = 1; j <= C; j++) {
-			if (visit[1][j] != 0){
-				check[visit[1][j]] = 1;
-			}		
+		
+		
+		
+		if (count == 1){
+			;
 		}
-		int point = 0;
-		for (int c = 1; c <= count ; c++){
-			if (check[c] == 0){
-				point = c;
+		else {
+			
+				
+				
+			int check[100000]={0}; 
+			for (int j = 1; j <= C; j++) {
+				if (visit[R][j] != 0){
+					check[visit[R][j]] = 1;
+				}		
 			}
-		}
-
-		int m[MAX]= {0};
-		for (int j = 1; j <= C; j++) {
-			for (int i = R; i >= 1; i--) {
-				if (visit[i][j] == point){
-					 m[j]=i;
-					 break;
-					}
+			int point = 0;
+			for (int c = 1; c <= count ; c++){
+				if (check[c] == 0){
+					point = c;
 				}
-		}
-
-		int change = 0;
-		int flag = 0;
-		int move_val = 101;
-		for (int j = 1; j <= C; j++) {	
-			int k = 1;
-			if (m[j] > 0)	{
-				while (1) {
-					if (m[j]+k == R && map[m[j]+k][j] == 0){
+			}
+		
+			if (point !=0 ) {
+				//cout << point<<'\n';
+				int m[MAX]= {0};
+					for (int j = 1; j <= C; j++) {
+						for (int i = R; i >= 1; i--) {
+							if (visit[i][j] == point){
+								 m[j]=i;
+								 break;
+							}
+						}
+						//cout << 'j'<< j<< ' '<< m[j] << '\n';
+							
+					}
+					
+					int change = 0;
+					int flag = 0;
+					int move_val = 101;
+					for (int j = 1; j <= C; j++) {	
+						if (m[j] > 0)	{
+							int k = 1;
+							while (1) {
+								if (m[j]+k < R ){
+									if (map[m[j]+k][j] == 0) {
+										k=k+1;
+									}
+									else {
+										k = k- 1;
+										break;
+									}
+								}
+								else if(m[j]+k == R){
+									if (map[m[j]+k][j] == 0) {
+										break;
+									}
+									else {
+										k = k- 1;
+										break;
+									}
+								}
+//								cout << m[j]+k<<'\n';
+							}			
+							//cout << k <<'\n';
+							int temp = k;
+							if ( temp < move_val ) move_val =temp;
+						}
+						else continue;
+						//cout << k <<'\n';
 						
-						break;
 					}
-					else if (m[j]+k <= R && map[m[j]+k][j] == 1){
-						k = k- 1;					
-						break;
+				//	cout << move_val << '\n';
+					int t[MAX][MAX]={0};
+			
+					for (int i = R; i >= 1; i--) {
+						for (int j = 1; j <= C; j++) {
+							if (visit[i][j] == point){
+								t[i+move_val][j] = map[i][j];
+							}
+							else {
+								t[i][j] = map[i][j];
+							}
+						}
 					}
-					k = k + 1;
-				}			
-			}
-			int temp = k;
-			if ( temp < move_val ) move_val =temp;
-		}
-
-		int t[MAX][MAX]={0};
-		for (int i = R; i >= 1; i--) {
-			for (int j = 1; j <= C; j++) {
-				t[i][j] = map[i][j];
-			}
-		}
-
-		for (int i = R; i >= 1; i--) {
-			for (int j = 1; j <= C; j++) {
-				if (visit[i][j] == point){
-					map[i+move_val][j] = t[i][j];
-				}
-			}
-		}
+					
+					for (int i = R; i >= 1; i--) {
+						for (int j = 1; j <= C; j++) {
+							map[i][j] = t[i][j];
+						}
+					}
+			}			
+		}	
 	}
-
+		
 	for (int i = 1; i <= R; i++) {
 		for (int j = 1; j <= C; j++) {
 			if (map[i][j] == 0) cout << '.';
@@ -144,7 +179,7 @@ int main() {
 	ans = 0; 
     scanf("%d %d", &R, &C);
 	
-	for (int i = R; i >= 1; i--) {
+	for (int i = 1; i <= R; i++) {
 		for (int j = 1; j <= C; j++) {
 			char a;
 			cin >> a;
