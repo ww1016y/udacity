@@ -1,3 +1,0 @@
-/home/workspace/udacity/myrobot/build/CMakeFiles/edit_cache.dir
-/home/workspace/udacity/myrobot/build/CMakeFiles/hello.dir
-/home/workspace/udacity/myrobot/build/CMakeFiles/rebuild_cache.dir
