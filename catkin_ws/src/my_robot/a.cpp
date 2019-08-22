@@ -39,7 +39,9 @@ void solve() {
 		int end_flag = 0;
 		int add_flag = 0;
 
-		if (ans == v[k].first ) {
+		
+
+		if (k<v.size() && ans == v[k].first ) {
 			
 			dir = dir + v[k].second;
 			if (dir > 3) dir = 0;
@@ -59,18 +61,21 @@ void solve() {
 			if (end_flag == 1) { ans = ans + 1; break; }
 			else {
 
-				int next_x;
-				int pre_save_x = snake[0].second;
-				int next_y;
+				int next_x = snake[0].first;
+				int pre_save_x = snake[0].first;
+				int next_y = snake[0].second;
 				int pre_save_y = snake[0].second;
 				snake[0].first = nx;
 				snake[0].second = ny;
 				for (int i = 1; i < snake.size(); i++) {
-					next_x = snake[i].first;
-					next_y = snake[i].second;
+					pre_save_x = snake[i].first;
+					pre_save_y = snake[i].second;
 
-					snake[i].first = pre_save_x;
-					snake[i].second = pre_save_y;
+					snake[i].first = next_x;
+					snake[i].second = next_y;
+
+					next_x = pre_save_x;
+					next_y = pre_save_y;
 				}
 				if (add_flag == 1) {
 					snake.push_back(make_pair(next_x, next_y));
@@ -82,32 +87,44 @@ void solve() {
 			}
 		}
 		else {
+	//		cout << "a";
 			int nx = snake[0].first + dx[dir];
 			int ny = snake[0].second + dy[dir];
-
+	//		cout << "a";
 			if (nx <= 0 || ny <= 0 || nx > N || ny > N) { ans = ans + 1; break; }
+//			cout << "a";
+		//	cout << nx << ' ' << ny << '\n';
 
 			for (int i = 1; i < snake.size(); i++) {
-				if (nx == snake[i].first && ny == snake[i].second) end_flag = 1;
+			//	cout << snake[i].first << ' ' << snake[i].second << '\n';
+				if (nx == snake[i].first && ny == snake[i].second) {
+					
+					end_flag = 1;
+				}
 			}
+		//	cout <<  '\n';
 
 			if (ap[nx][ny] == 1) add_flag = 1;
 
 			if (end_flag == 1) { ans = ans + 1; break; }
 			else {
 
-				int next_x;
-				int pre_save_x = snake[0].second;
-				int next_y;
+				int next_x = snake[0].first;
+				int pre_save_x = snake[0].first;
+				int next_y = snake[0].second;
 				int pre_save_y = snake[0].second;
 				snake[0].first = nx;
 				snake[0].second = ny;
 				for (int i = 1; i < snake.size(); i++) {
-					next_x = snake[i].first;
-					next_y = snake[i].second;
+					pre_save_x = snake[i].first;
+					pre_save_y = snake[i].second;
 
-					snake[i].first = pre_save_x;
-					snake[i].second = pre_save_y;
+					snake[i].first = next_x;
+					snake[i].second = next_y;
+
+					next_x = pre_save_x;
+					next_y = pre_save_y;
+					
 				}
 				if (add_flag == 1) {
 					snake.push_back(make_pair(next_x, next_y));
