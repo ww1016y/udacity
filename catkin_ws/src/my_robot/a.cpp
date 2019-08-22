@@ -1,114 +1,152 @@
-#include <stdio.h>
-#include <iostream>
-#include <queue>
-#include <string.h>
-#include <vector>
-#include <algorithm>
-#define MAX 20
-using namespace std;
-int map[MAX][MAX];
-int m[MAX][MAX];
-int N, M;
+#include<iostream>
+#include<stdio.h>
+#include<queue>
+#include<vector>
 
+#define MAX 101
+
+using namespace std;
+
+int N, K, L;
+int ap[MAX][MAX];
+vector <pair<int, int>> v;
+vector <pair<int, int>> snake;
+int ans;
 int dx[4] = {0,1,0,-1};
 int dy[4] = {1,0,-1,0};
-int ans;
 
-void remap(){
+void solve() {
 
-	for (int i = 0; i < W; i++) {
-		queue <int> q;
-		for (int j = H-1; j >= 0; j++) {
-			if (map[j][i] > 0){
-				q.push(map[j][i]);	
-			}
-		}
-		for (int j = H-1; j >= 0; j++) {
-			if (!q.empty){
-				map[j][i] = q.front();	
-				q.pop();
-			}
-		}
-	}
-}
+	snake.push_back(make_pair(1,1));
 
-void copymap(int a[][], int b[][]){
-
-	for (int i = 0; i < H; i++) {
-		for (int j = 0; j < W; j++) {
-			b[i][j] = a[i][j];
-		}
-	}
-}
-
-void boom(int x, int y){
-	
-	int len = map[x][y];
-	map[x][y] = 0;
-	if (len == 1){
-		map[x][y] = 0;
-		return;
+/*	if (ap[1][2] == 1) {
+		ap[1][2] = 0;
+		snake[0].second = 2;
+		snake.push_back(make_pair(1, 1));
 	}
 	else {
-		for(int i =0; i<4; i++){
-			for (int j = 1; j < len; j++  ){
-				int nx = x+j*dx[i];
-				int ny = y+j*dy[i];
-				if (nx<0 || ny < 0 || nx >= H || ny >= W || map[nx][ny] == 0) continue;
-								
-				boom(nx,ny);
-			}
-		}
-	}
-}
-
-void solve(int index){
 	
-	if (index == N ){
-		int count = 0 ;
-		for (int i = 0; i < H; i++) {
-			for (int j = 0; j < W; j++) {
-				if (map[i][j] > 0) {
-					count = count + 1;
+		snake[0].second = 2;
+	}
+	*/
+	//ans = ans + 1;
+
+	int k = 0;
+	int dir = 0;
+
+	while (1) {
+		
+		int end_flag = 0;
+		int add_flag = 0;
+
+		if (ans == v[k].first ) {
+			
+			dir = dir + v[k].second;
+			if (dir > 3) dir = 0;
+			else if (dir < 0) dir = 3;
+			
+			int nx = snake[0].first + dx[dir];
+			int ny = snake[0].second + dy[dir];
+			
+			if (nx <= 0 || ny <= 0 || nx > N || ny > N) { ans = ans + 1; break; }
+
+			for (int i = 1; i < snake.size(); i++) {
+				if (nx == snake[i].first && ny == snake[i].second) end_flag = 1;
+			}
+
+			if (ap[nx][ny] == 1) add_flag = 1;
+			
+			if (end_flag == 1) { ans = ans + 1; break; }
+			else {
+
+				int next_x;
+				int pre_save_x = snake[0].second;
+				int next_y;
+				int pre_save_y = snake[0].second;
+				snake[0].first = nx;
+				snake[0].second = ny;
+				for (int i = 1; i < snake.size(); i++) {
+					next_x = snake[i].first;
+					next_y = snake[i].second;
+
+					snake[i].first = pre_save_x;
+					snake[i].second = pre_save_y;
 				}
+				if (add_flag == 1) {
+					snake.push_back(make_pair(next_x, next_y));
+					add_flag = 0;
+				}
+					
+				k = k + 1;
+				ans = ans + 1;
 			}
 		}
-		if (count > ans) ans = count;
-		return;
-	}
+		else {
+			int nx = snake[0].first + dx[dir];
+			int ny = snake[0].second + dy[dir];
 
-	copymap(map,m);
+			if (nx <= 0 || ny <= 0 || nx > N || ny > N) { ans = ans + 1; break; }
 
-	for (int i = 0; i < W; i++) {
-		for (int j = 0; j < H; j++) {
-			if (map[j][i] > 0) {
-				boom(j,i);
-				remap();
-				solve(index+1);
-				copymap(m,map);
-				break;
+			for (int i = 1; i < snake.size(); i++) {
+				if (nx == snake[i].first && ny == snake[i].second) end_flag = 1;
+			}
+
+			if (ap[nx][ny] == 1) add_flag = 1;
+
+			if (end_flag == 1) { ans = ans + 1; break; }
+			else {
+
+				int next_x;
+				int pre_save_x = snake[0].second;
+				int next_y;
+				int pre_save_y = snake[0].second;
+				snake[0].first = nx;
+				snake[0].second = ny;
+				for (int i = 1; i < snake.size(); i++) {
+					next_x = snake[i].first;
+					next_y = snake[i].second;
+
+					snake[i].first = pre_save_x;
+					snake[i].second = pre_save_y;
+				}
+				if (add_flag == 1) {
+					snake.push_back(make_pair(next_x, next_y));
+					add_flag = 0;
+				}
+				ans = ans + 1;
 			}
 		}
 	}
 }
+
 
 int main() {
-    int t;
-    scanf("%d", &t);
-    for (int tc = 1; tc <= t; tc++) {
-        
-	memset(map,0,sizeof(map));
-	ans = 0; 
-        scanf("%d %d %d", &N, &W, &H);
 
-	for (int i = 0; i < H; i++) {
-		for (int j = 0; j < W; j++) {
-			cin >> map[i][j];
+	cin >> N;
+	cin >> K;
+
+	for (int i = 0; i < K; i ++) {
+		int x, y;
+		cin >> x >> y;
+		ap[x][y] = 1;
+	}
+	cin >> L;
+
+	for (int i = 0; i < L; i++) {
+		int t;
+		char dir;
+		cin >> t >> dir;
+		if (dir == 'D') { //오른쪽
+			v.push_back(make_pair(t,1));
+		}
+		else if (dir == 'L') { //오른쪽
+			v.push_back(make_pair(t, -1));
 		}
 	}
 
-	solve(0);
-	
-        printf("#%d %d", tc, ans);
-    }
+	solve();
+
+	cout << ans;
+
+	return 0;
 }
