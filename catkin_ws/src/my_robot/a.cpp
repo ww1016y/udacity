@@ -1,169 +1,128 @@
-#include<iostream>
-#include<stdio.h>
-#include<queue>
-#include<vector>
-
-#define MAX 101
-
+#include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
+#define MAX 11
 
-int N, K, L;
-int ap[MAX][MAX];
-vector <pair<int, int>> v;
-vector <pair<int, int>> snake;
+int map[MAX][MAX];
+int visit[MAX][MAX][MAX][MAX];
 int ans;
+int N, M;
+int rx, ry, bx, by, ox, oy;
 int dx[4] = {0,1,0,-1};
 int dy[4] = {1,0,-1,0};
+int flag;
 
-void solve() {
+void solve(int a, int b, int c, int d, int index) {
 
-	snake.push_back(make_pair(1,1));
 
-/*	if (ap[1][2] == 1) {
-		ap[1][2] = 0;
-		snake[0].second = 2;
-		snake.push_back(make_pair(1, 1));
+	if (a == c && b == d && a == ox && b == oy) {
+		ans = -1;
+		return;
 	}
-	else {
+	else if (a != c && b != d && a == ox && b == oy) {
+		ans = index-1;
+		flag = 1;
+		return;
+	}
+	if (index > 10) {
+		ans = -1;
+		return;
+	}
+
+	if (flag == 0) {
+		for (int i = 0; i < 4; i++) {
+			int rrx = a;
+			int rry = b;
+			int bbx = c;
+			int bby = d;
+
+			while (1) {
+				rrx = rrx + dx[i];
+				rry = rry + dy[i];
+				if (rrx <= 0 || rry <= 0 || rrx >= N - 1 || rry >= M - 1 || map[rrx][rry] == 1) {
+					break;
+				}
+			}
+			while (1) {
+				bbx = bbx + dx[i];
+				bby = bby + dy[i];
+				if (bbx <= 0 || bby <= 0 || bbx >= N - 1 || bby >= M - 1 || map[bbx][bby] == 1) {
+					break;
+				}
+			}
+
+			//같은 위치 체크
+			if (rrx == bby && rry == bby && rrx != ox && rry != oy) {
+				if (i == 0) {
+					if (rry < bby) rry = rry - 1;
+					else bby = bby - 1;
+				}
+				else if (i == 1) {
+					if (rrx < bbx) rrx = rrx - 1;
+					else bbx = bbx - 1;
+				}
+				else if (i == 2) {
+					if (rry < bby) rry = rry + 1;
+					else bby = bby + 1;
+				}
+				else if (i == 3) {
+					if (rrx < bbx) rrx = rrx + 1;
+					else bbx = bbx + 1;
+				}
+			}
+
+			if (visit[rrx][rry][bbx][bby] == 1) {
+				continue;
+			}
+			visit[rrx][rry][bbx][bby] = 1;
+			solve(rrx, rry, bbx, bby, index + 1);
+			visit[rrx][rry][bbx][bby] = 0;
+		}
+	}
 	
-		snake[0].second = 2;
-	}
-	*/
-	//ans = ans + 1;
-
-	int k = 0;
-	int dir = 0;
-
-	while (1) {
-		
-		int end_flag = 0;
-		int add_flag = 0;
-
-		
-
-		if (k<v.size() && ans == v[k].first ) {
-			
-			dir = dir + v[k].second;
-			if (dir > 3) dir = 0;
-			else if (dir < 0) dir = 3;
-			
-			int nx = snake[0].first + dx[dir];
-			int ny = snake[0].second + dy[dir];
-			
-			if (nx <= 0 || ny <= 0 || nx > N || ny > N) { ans = ans + 1; break; }
-
-			for (int i = 1; i < snake.size(); i++) {
-				if (nx == snake[i].first && ny == snake[i].second) end_flag = 1;
-			}
-
-			if (ap[nx][ny] == 1) add_flag = 1;
-			
-			if (end_flag == 1) { ans = ans + 1; break; }
-			else {
-
-				int next_x = snake[0].first;
-				int pre_save_x = snake[0].first;
-				int next_y = snake[0].second;
-				int pre_save_y = snake[0].second;
-				snake[0].first = nx;
-				snake[0].second = ny;
-				for (int i = 1; i < snake.size(); i++) {
-					pre_save_x = snake[i].first;
-					pre_save_y = snake[i].second;
-
-					snake[i].first = next_x;
-					snake[i].second = next_y;
-
-					next_x = pre_save_x;
-					next_y = pre_save_y;
-				}
-				if (add_flag == 1) {
-					snake.push_back(make_pair(next_x, next_y));
-					add_flag = 0;
-				}
-					
-				k = k + 1;
-				ans = ans + 1;
-			}
-		}
-		else {
-	//		cout << "a";
-			int nx = snake[0].first + dx[dir];
-			int ny = snake[0].second + dy[dir];
-	//		cout << "a";
-			if (nx <= 0 || ny <= 0 || nx > N || ny > N) { ans = ans + 1; break; }
-//			cout << "a";
-		//	cout << nx << ' ' << ny << '\n';
-
-			for (int i = 1; i < snake.size(); i++) {
-			//	cout << snake[i].first << ' ' << snake[i].second << '\n';
-				if (nx == snake[i].first && ny == snake[i].second) {
-					
-					end_flag = 1;
-				}
-			}
-		//	cout <<  '\n';
-
-			if (ap[nx][ny] == 1) add_flag = 1;
-
-			if (end_flag == 1) { ans = ans + 1; break; }
-			else {
-
-				int next_x = snake[0].first;
-				int pre_save_x = snake[0].first;
-				int next_y = snake[0].second;
-				int pre_save_y = snake[0].second;
-				snake[0].first = nx;
-				snake[0].second = ny;
-				for (int i = 1; i < snake.size(); i++) {
-					pre_save_x = snake[i].first;
-					pre_save_y = snake[i].second;
-
-					snake[i].first = next_x;
-					snake[i].second = next_y;
-
-					next_x = pre_save_x;
-					next_y = pre_save_y;
-					
-				}
-				if (add_flag == 1) {
-					snake.push_back(make_pair(next_x, next_y));
-					add_flag = 0;
-				}
-				ans = ans + 1;
-			}
-		}
-	}
+	
 }
 
-
 int main() {
+	int T = 1;
+	cin >> T;
 
-	cin >> N;
-	cin >> K;
-
-	for (int i = 0; i < K; i ++) {
-		int x, y;
-		cin >> x >> y;
-		ap[x][y] = 1;
-	}
-	cin >> L;
-
-	for (int i = 0; i < L; i++) {
-		int t;
-		char dir;
-		cin >> t >> dir;
-		if (dir == 'D') { //오른쪽
-			v.push_back(make_pair(t,1));
+	for (int t = 0; t < T; T++) {
+		ans = 0;
+		cin >> N >> M;
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				char a;
+				cin >> a;
+				if (a == '#') {
+					map[i][j] = 1;
+				}
+				else if (a == '.') {
+					map[i][j] = 0;
+				}
+				else if (a == 'B') {
+					map[i][j] = 2;
+					bx = i;
+					by = j;
+				}
+				else if (a == 'R') {
+					map[i][j] = 3;
+					rx = i;
+					ry = j;
+				}
+				else if (a == 'O') {
+					map[i][j] = 4;
+					ox = i;
+					oy = j;
+				}
+			}
 		}
-		else if (dir == 'L') { //오른쪽
-			v.push_back(make_pair(t, -1));
-		}
-	}
+		visit[rx][ry][bx][by] = 1;
+		solve(rx,ry,bx,by,1);
 
-	solve();
+	}
 
 	cout << ans;
-
-	return 0;
 }
