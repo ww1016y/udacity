@@ -19,13 +19,35 @@ vector <pair<int, int>> v;
 
 void check(){
 	
+	int sum1 = 0;
+	int profit1 = 0;
+	int sum2 = 0;
+	int profit2 = 0;
 	for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				if (visit[i][j] == 1){
-					if (map[i][j] <= C ){
-						map[i][j]
+					if (map[i][j]+ sum1 <= C ){
+						
+						sum1 = sum1 + map[i][j];
+						profit1 = profit1 + map[i][j]*map[i][j];
+						
+					}
+					else (map[i][j] <= C){
+
+						int temp = profit1 + map[i][j]*map[i][j];
+						if (temp > profit1) profit1 =temp;
+					}
+				}
+
+				if (visit[i][j] == 2){
+					if (map[i][j]+ sum <= C ){
+						
 						sum = sum + map[i][j];
 						profit = profit + map[i][j]*map[i][j];
+						
+					}
+					else (map[i][j] <= C){
+					
 					}
 				}
 			}
@@ -38,9 +60,13 @@ void solve(int x, int y) {
 	for (int i = x; i < N; i++) {
 		for (int j = y; j < N-M+1; j++) {
 			if (j+M-1<N){
-				visit[i][j] = 2;
+				for (int k = 0; k<M; k++){
+						visit[i][j+k] = 2;
+					}
 				check();
-				visit[i][j] = 0;
+				for (int k = 0; k<M; k++){
+						visit[i][j+k] = 0;
+					}
 			}
 		}
 	}
@@ -64,9 +90,14 @@ int main() {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N-M+1; j++) {
 				if (j+M-1<N){
-					visit[i][j] = 1;
+					
+					for (int k = 0; k<M; k++){
+						visit[i][j+k] = 1;
+					}
 					solve(i,j+M);
-					visit[i][j] = 0;
+					for (int k = 0; k<M; k++){
+						visit[i][j+k] = 0;
+					}
 				}
 			}
 		}
