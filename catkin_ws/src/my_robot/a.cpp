@@ -16,43 +16,45 @@ int visit[MAX][MAX];
 int dx[] = {-1,1,0,0};
 int dy[] = {0,0,1,-1};
 vector <pair<int, int>> v;
+int check1_max = 0;
+int check2_max = 0;
 
-void check(){//재귀로만들기
+void check1(int sum1, int profit1, int num){//재귀로만들기
 	
-	int sum1 = 0;
-	int profit1 = 0;
-	int sum2 = 0;
-	int profit2 = 0;
+	if (profit1 > check1_max) check1_max = profit1;
+	if (num == M) return;
+	
 	for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (visit[i][j] == 1){
-					if (map[i][j]+ sum1 <= C ){
-						
-						sum1 = sum1 + map[i][j];
-						profit1 = profit1 + map[i][j]*map[i][j];
-						
-					}
-					else (map[i][j] <= C){
-
-						int temp = profit1 + map[i][j]*map[i][j];
-						if (temp > profit1) profit1 =temp;
-					}
+		for (int j = 0; j < N; j++) {
+			if (visit[i][j] == 1){
+				if (map[i][j]+sum1 <= C ){
+					check(sum1 + map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
 				}
-
-				if (visit[i][j] == 2){
-					if (map[i][j]+ sum <= C ){
-						
-						sum = sum + map[i][j];
-						profit = profit + map[i][j]*map[i][j];
-						
-					}
-					else (map[i][j] <= C){
-					
-					}
-				}
+				else if (map[i][j] <= C ){
+					check(map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
+				}	
 			}
 		}
+	}
+}
 
+void check2(int sum1, int profit1, int num){//재귀로만들기
+	
+	if (profit1 > check2_max) check2_max = profit1;
+	if (num == M) return;
+	
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			if (visit[i][j] == 2){
+				if (map[i][j]+sum1 <= C ){
+					check(sum1 + map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
+				}
+				else if (map[i][j] <= C ){
+					check(map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
+				}	
+			}
+		}
+	}
 }
 
 void solve(int x, int y) {
@@ -63,13 +65,21 @@ void solve(int x, int y) {
 				for (int k = 0; k<M; k++){
 						visit[i][j+k] = 2;
 					}
-				check();
+					
+				check1_max = 0;
+				check2_max = 0;
+				
+				check1(0,0,0);
+				check2(0,0,0);
+				
+				if (check1_max + check2_max > ans) ans = check1_max + check2_max;
+				
 				for (int k = 0; k<M; k++){
 						visit[i][j+k] = 0;
 					}
 			}
 		}
-y=1;
+		y=1;
 	}
 
 	return;
