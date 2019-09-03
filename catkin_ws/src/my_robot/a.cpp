@@ -117,3 +117,74 @@ int main() {
 		cout << '#' << t+1 << ' ' << ans;
 	}
 }
+
+
+
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+#define MAX 10
+int N,M;
+int ans;
+int ox, oy, rx, ry, bx, by;
+int map[MAX][MAX];
+int visit[MAX][MAX];
+
+void copy(int a[][MAX], int b[][MAX]) {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			a[i][j] = b[i][j];
+		}
+	}
+}
+
+void solve(int index) {
+
+	
+
+
+
+	return;
+}
+
+int main() {
+
+	cin >> N, M;
+	ans = 987654321;
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			char a;
+			cin >> a;
+
+			if (a == '#') {
+				map[i][j] = 1;
+			}
+			else if (a == '.') {
+				map[i][j] = 0;
+			}
+			else if (a == 'O') {
+				map[i][j] = 2;
+				ox = i;
+				oy = j;
+			}
+			else if (a == 'R') {
+				map[i][j] = 3;
+				rx = i;
+				ry = j;
+			}
+			else if (a == 'B') {
+				map[i][j] = 4;
+				bx = i;
+				by = j;
+			}
+		}
+	}
+	
+	solve(0);
+	cout << ans;
+}
