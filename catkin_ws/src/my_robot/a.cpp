@@ -17,7 +17,7 @@ int dx[] = {-1,1,0,0};
 int dy[] = {0,0,1,-1};
 vector <pair<int, int>> v;
 
-void check(){
+void check(){//재귀로만들기
 	
 	int sum1 = 0;
 	int profit1 = 0;
@@ -69,6 +69,7 @@ void solve(int x, int y) {
 					}
 			}
 		}
+y=1;
 	}
 
 	return;
