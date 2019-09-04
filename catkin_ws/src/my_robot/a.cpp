@@ -1,138 +1,19 @@
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
 #include <vector>
 #include <queue>
 
 using namespace std;
 
 #define MAX 11
-int N, C, M;
-int ans;
-
-int map[MAX][MAX];
-int visit[MAX][MAX];
-
-int dx[] = {-1,1,0,0};
-int dy[] = {0,0,1,-1};
-vector <pair<int, int>> v;
-int check1_max = 0;
-int check2_max = 0;
-
-void check1(int sum1, int profit1, int num){//재귀로만들기
-	
-	if (profit1 > check1_max) check1_max = profit1;
-	if (num == M) return;
-	
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			if (visit[i][j] == 1){
-				if (map[i][j]+sum1 <= C ){
-					check(sum1 + map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
-				}
-				else if (map[i][j] <= C ){
-					check(map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
-				}	
-			}
-		}
-	}
-}
-
-void check2(int sum1, int profit1, int num){//재귀로만들기
-	
-	if (profit1 > check2_max) check2_max = profit1;
-	if (num == M) return;
-	
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			if (visit[i][j] == 2){
-				if (map[i][j]+sum1 <= C ){
-					check(sum1 + map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
-				}
-				else if (map[i][j] <= C ){
-					check(map[i][j],profit1 + map[i][j]*map[i][j],num+1 );
-				}	
-			}
-		}
-	}
-}
-
-void solve(int x, int y) {
-	
-	for (int i = x; i < N; i++) {
-		for (int j = y; j < N-M+1; j++) {
-			if (j+M-1<N){
-				for (int k = 0; k<M; k++){
-						visit[i][j+k] = 2;
-					}
-					
-				check1_max = 0;
-				check2_max = 0;
-				
-				check1(0,0,0);
-				check2(0,0,0);
-				
-				if (check1_max + check2_max > ans) ans = check1_max + check2_max;
-				
-				for (int k = 0; k<M; k++){
-						visit[i][j+k] = 0;
-					}
-			}
-		}
-		y=1;
-	}
-
-	return;
-}
-
-int main() {
-	int T;
-	cin >> T;
-	for(int t = 0; t <T; t++){
-		cin >> N >> M >> C;
-		ans = 0;
-
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				cin >> map[i][j];
-			}
-		}
-
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N-M+1; j++) {
-				if (j+M-1<N){
-					
-					for (int k = 0; k<M; k++){
-						visit[i][j+k] = 1;
-					}
-					solve(i,j+M);
-					for (int k = 0; k<M; k++){
-						visit[i][j+k] = 0;
-					}
-				}
-			}
-		}
-		
-
-		cout << '#' << t+1 << ' ' << ans;
-	}
-}
-
-
-
-#include <iostream>
-#include <stdio.h>
-#include <vector>
-#include <queue>
-
-using namespace std;
-
-#define MAX 10
 int N,M;
 int ans;
 int ox, oy, rx, ry, bx, by;
 int map[MAX][MAX];
 int visit[MAX][MAX];
+int check[MAX][MAX][MAX][MAX];
+int dx[] = { 0,1,0,-1 };
+int dy[] = { 1,0,-1,0 };
 
 void copy(int a[][MAX], int b[][MAX]) {
 	for (int i = 0; i < N; i++) {
@@ -144,20 +25,111 @@ void copy(int a[][MAX], int b[][MAX]) {
 
 void solve(int index) {
 
+	if (index > 10) {
+		
+		return;
+	}
 	
+	for (int i = 0; i < 4; i++) {
+		int nrx = rx;
+		int nry = ry;
+		int nbx = bx;
+		int nby = by;
 
+		while (1) {
+			nrx = nrx + dx[i];
+			nry = nry + dy[i];
 
+			if (nrx < 1 || nry < 1 || nrx >= N -1 || nry >= M-1 || map[nrx][nry] == 1) {
+				nrx = nrx - dx[i];
+				nry = nry - dy[i];
+				break;
+			}
+		}
+		while (1) {
+			nbx = nbx + dx[i];
+			nby = nby + dy[i];
 
+			if (nbx < 1 || nby < 1 || nbx >= N - 1 || nby >= M - 1 || map[nbx][nby] == 1) {
+				nbx = nbx - dx[i];
+				nby = nby - dy[i];
+				break;
+			}
+		}
+
+		if (nrx==nbx && nry == nby && nrx == ox && nry == oy) {
+			continue;
+		}
+		else if (nrx == nbx && nry == nby ){
+			if (i == 0) {
+				if (ry < by) {
+					nry = nry - 1;
+				}
+				else {
+					nby = nby - 1;
+				}
+			}
+			else if (i == 1) {
+				if (rx < bx) {
+					nrx = nrx - 1;
+				}
+				else {
+					nbx = nbx - 1;
+				}
+			}
+			else if (i == 2) {
+				if (ry < by) {
+					nby = nby + 1;
+				}
+				else {
+					nry = nry + 1;
+				}
+			}
+			else if (i == 3) {
+				if (rx < bx) {
+					nbx = nbx + 1;
+				}
+				else {
+					nrx = nrx + 1;
+				}
+			}
+		
+		}
+
+		if (nrx == ox && nry == oy) {
+			if (index < ans) ans = index;
+			return;
+		}
+		else if (nbx == ox && nby == oy) {
+			continue;
+		}
+
+		if (check[nrx][nry][nbx][nby] == 1) {
+			continue;
+		}
+		else {
+
+			rx = nrx;
+			ry = nry;
+			bx = nbx;
+			by = nby;
+
+			check[nrx][nry][nbx][nby] = 1;
+			solve(index + 1);
+			check[nrx][nry][nbx][nby] = 0;
+		}
+
+	}
 	return;
 }
 
 int main() {
 
-	cin >> N, M;
+	cin >> N >> M;
 	ans = 987654321;
 
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
+		for (int j = 0; j < M; j++) {
 			char a;
 			cin >> a;
 
@@ -184,7 +156,11 @@ int main() {
 			}
 		}
 	}
-	
-	solve(0);
+	check[rx][ry][bx][by] = 1;
+	solve(1);
+
+	if (ans == 987654321) {
+		ans = -1;
+	}
 	cout << ans;
 }
