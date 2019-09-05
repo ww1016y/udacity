@@ -1,166 +1,138 @@
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 #include <vector>
 #include <queue>
 
 using namespace std;
 
-#define MAX 11
-int N,M;
+#define MAX 51
+int N;
 int ans;
-int ox, oy, rx, ry, bx, by;
+
 int map[MAX][MAX];
-int visit[MAX][MAX];
-int check[MAX][MAX][MAX][MAX];
-int dx[] = { 0,1,0,-1 };
-int dy[] = { 1,0,-1,0 };
+int visit[MAX][MAX][2];
 
-void copy(int a[][MAX], int b[][MAX]) {
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++) {
-			a[i][j] = b[i][j];
-		}
-	}
-}
+int dx[] = {0,-1,1,0,0};
+int dy[] = {0,0,0,1,-1};
+vector <pair<int, int>> v;
 
-void solve(int index) {
+int arr[9];
 
-	if (index > 10) {
-		
-		return;
-	}
-	
-	for (int i = 0; i < 4; i++) {
-		int nrx = rx;
-		int nry = ry;
-		int nbx = bx;
-		int nby = by;
+void solve(int index, int num) {
+   
+   
+   if (num == 9) {
+      if (arr[4] == map[0][3]){
+      int k = 1;
+      int point = 0;
+      for (int i = 0; i < N; i++) {
+         int out = 0;
+         int game[4] = {0};
+         while (1){
+            
+            int j = arr[k] ;
 
-		while (1) {
-			nrx = nrx + dx[i];
-			nry = nry + dy[i];
+            if (map[i][j] == 0){
+               out = out + 1;
+               if (out == 3) {
+                  k = k + 1;
+                  if ( k > 9){
+                     k = k % 9;
+                  }
+                  break;
+               }
+            }
+            else if (map[i][j] == 1){
+               if (game[2] == 1){
+                  point = point + 1;
+               }
+               game[2] = game[1];
+               game[1] = game[0];
+               game[0] = 1;
+            }
+            else if (map[i][j] == 2){
+               if (game[1] == 1){
+                  point = point + 1;
+               }
+               if (game[2] == 1){
+                  point = point + 1;
+               }
+               game[2] = game[0];
+               game[1] = 1;
+               game[0] = 0;
+            }
+            else if (map[i][j] == 3){
+               if (game[0] == 1){
+                  point = point + 1;
+               }
+               if (game[1] == 1){
+                  point = point + 1;
+               }
+               if (game[2] == 1){
+                  point = point + 1;
+               }
+               game[2] = 1;
+               game[1] = 0;
+               game[0] = 0;
+            }
+            else if (map[i][j] == 4){
+               if (game[0] == 1){
+                  point = point + 1;
+               }
+               if (game[1] == 1){
+                  point = point + 1;
+               }
+               if (game[2] == 1){
+                  point = point + 1;
+               }
+               point = point + 1;
+               game[2] = 0;
+               game[1] = 0;
+               game[0] = 0;
+            }
+            k = k + 1;
+            if ( k > 9){
+               k = k % 9;
+            }
+         }
+      }
 
-			if (nrx < 1 || nry < 1 || nrx >= N -1 || nry >= M-1 || map[nrx][nry] == 1) {
-				nrx = nrx - dx[i];
-				nry = nry - dy[i];
-				break;
-			}
-		}
-		while (1) {
-			nbx = nbx + dx[i];
-			nby = nby + dy[i];
+      if (point > ans) ans =point;
+      return;
+      }
+      else {
+         return;
+      }
+   }
+   
+   if (index > 9) index = index % 9;
+   cout << arr[num]<<' ' << num+1 << ' ' << index << '\n'; 
+   arr[num+1] = index+1;
+   solve(index+1,num+1);
+   arr[num+1] = 0;
 
-			if (nbx < 1 || nby < 1 || nbx >= N - 1 || nby >= M - 1 || map[nbx][nby] == 1) {
-				nbx = nbx - dx[i];
-				nby = nby - dy[i];
-				break;
-			}
-		}
+   solve(index+1,num);
 
-		if (nrx==nbx && nry == nby && nrx == ox && nry == oy) {
-			continue;
-		}
-		else if (nrx == nbx && nry == nby ){
-			if (i == 0) {
-				if (ry < by) {
-					nry = nry - 1;
-				}
-				else {
-					nby = nby - 1;
-				}
-			}
-			else if (i == 1) {
-				if (rx < bx) {
-					nrx = nrx - 1;
-				}
-				else {
-					nbx = nbx - 1;
-				}
-			}
-			else if (i == 2) {
-				if (ry < by) {
-					nby = nby + 1;
-				}
-				else {
-					nry = nry + 1;
-				}
-			}
-			else if (i == 3) {
-				if (rx < bx) {
-					nbx = nbx + 1;
-				}
-				else {
-					nrx = nrx + 1;
-				}
-			}
-		
-		}
-
-		if (nrx == ox && nry == oy) {
-			if (index < ans) ans = index;
-			return;
-		}
-		else if (nbx == ox && nby == oy) {
-			continue;
-		}
-
-		if (check[nrx][nry][nbx][nby] == 1) {
-			continue;
-		}
-		else {
-
-			rx = nrx;
-			ry = nry;
-			bx = nbx;
-			by = nby;
-
-			check[nrx][nry][nbx][nby] = 1;
-			solve(index + 1);
-			check[nrx][nry][nbx][nby] = 0;
-		}
-
-	}
-	return;
+   return;
 }
 
 int main() {
 
-	cin >> N >> M;
-	ans = 987654321;
+   cin >> N;
+   ans = 0;
 
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
-			char a;
-			cin >> a;
+   for (int i = 0; i < N; i++) {
+      for (int j = 0; j < 9; j++) {
+         cin >> map[i][j];
+      }
+   }
 
-			if (a == '#') {
-				map[i][j] = 1;
-			}
-			else if (a == '.') {
-				map[i][j] = 0;
-			}
-			else if (a == 'O') {
-				map[i][j] = 2;
-				ox = i;
-				oy = j;
-			}
-			else if (a == 'R') {
-				map[i][j] = 3;
-				rx = i;
-				ry = j;
-			}
-			else if (a == 'B') {
-				map[i][j] = 4;
-				bx = i;
-				by = j;
-			}
-		}
-	}
-	check[rx][ry][bx][by] = 1;
-	solve(1);
+   for (int i = 1; i <= 9; i++) {
+      arr[1]=i;   
+      solve(i, 1);
+      arr[1]=0;
+   }
 
-	if (ans == 987654321) {
-		ans = -1;
-	}
-	cout << ans;
+   cout << ans;
 }
