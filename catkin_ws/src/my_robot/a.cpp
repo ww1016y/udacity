@@ -1,138 +1,144 @@
 #include <iostream>
 #include <stdio.h>
-#include <string.h>
 #include <vector>
 #include <queue>
 
 using namespace std;
-
-#define MAX 51
-int N;
+#define MAX 11
+int N,M;
 int ans;
-
 int map[MAX][MAX];
-int visit[MAX][MAX][2];
+int visit[MAX][MAX];
+int num_map[MAX][MAX];
+int i_count = 0;
+int link[6][6];
+//int visit[MAX][MAX];
+int dx[] = { 0,1,0,-1 };
+int dy[] = { 1,0,-1,0 };
+vector<pair<int,int>> v[6];
 
-int dx[] = {0,-1,1,0,0};
-int dy[] = {0,0,0,1,-1};
-vector <pair<int, int>> v;
+void dfs(int start_x, int start_y, int l, int sum){
+	//cout << start_x << ' '<<  start_y << ' '<< '\n';
+	int fin_flag = 0;
+	for (int i = 1; i < i_count; i++) {
+		if (link[0][i] == 0){
+			fin_flag = 1;	
+			break;
+		}
+	}
+	if (fin_flag == 0) {
+		if (sum < ans) ans = sum;
+		return;
+	}
 
-int arr[9];
+	for (int i = start_x; i < i_count; i++) {
+		for (int j = start_y; j < v[i].size(); j++) {
+			//cout << i << ' '<<  j << ' '<< '\n';
+			
+			
+			for(int k = l; k<4; k++){
+				int d_count = 0;
+				int flag = 0;
+				int nx = v[i][j].first;
+			int ny = v[i][j].second;	
+			int temp = num_map[nx][ny];
+				while(1){
+					nx = nx + dx[i];
+					nx = ny + dy[i];
+					d_count = d_count + 1;
+					if(num_map[nx][ny]>0 && num_map[nx][ny] != temp){			
+						flag = 1;
+						break;
+					}
+					else if(num_map[nx][ny] == temp){
+							
+						break;
+					}
+					else if ( nx >= N || ny >=M || nx < 0 || ny <0){
+						break;
+					}		
+				}
+				
+				if (d_count >= 2 && flag == 1){
+					if(link[temp][num_map[nx][ny]] == 0){
+						link[temp][num_map[nx][ny]] = 1;	
+						link[num_map[nx][ny]][temp] = 1;
+						for(int g =0; g<i_count;g++){
+							if( link[temp][g]== 1){
+								link[num_map[nx][ny]][g] = 1;
+								link[g][num_map[nx][ny]] = 1;
+							}
+						}
 
-void solve(int index, int num) {
-   
-   
-   if (num == 9) {
-      if (arr[4] == map[0][3]){
-      int k = 1;
-      int point = 0;
-      for (int i = 0; i < N; i++) {
-         int out = 0;
-         int game[4] = {0};
-         while (1){
-            
-            int j = arr[k] ;
+						dfs(i,j,k+1,sum+d_count);
+					}	
+				}
+			}
+			l=0;
+		}
+		start_y=0;
+	}
 
-            if (map[i][j] == 0){
-               out = out + 1;
-               if (out == 3) {
-                  k = k + 1;
-                  if ( k > 9){
-                     k = k % 9;
-                  }
-                  break;
-               }
-            }
-            else if (map[i][j] == 1){
-               if (game[2] == 1){
-                  point = point + 1;
-               }
-               game[2] = game[1];
-               game[1] = game[0];
-               game[0] = 1;
-            }
-            else if (map[i][j] == 2){
-               if (game[1] == 1){
-                  point = point + 1;
-               }
-               if (game[2] == 1){
-                  point = point + 1;
-               }
-               game[2] = game[0];
-               game[1] = 1;
-               game[0] = 0;
-            }
-            else if (map[i][j] == 3){
-               if (game[0] == 1){
-                  point = point + 1;
-               }
-               if (game[1] == 1){
-                  point = point + 1;
-               }
-               if (game[2] == 1){
-                  point = point + 1;
-               }
-               game[2] = 1;
-               game[1] = 0;
-               game[0] = 0;
-            }
-            else if (map[i][j] == 4){
-               if (game[0] == 1){
-                  point = point + 1;
-               }
-               if (game[1] == 1){
-                  point = point + 1;
-               }
-               if (game[2] == 1){
-                  point = point + 1;
-               }
-               point = point + 1;
-               game[2] = 0;
-               game[1] = 0;
-               game[0] = 0;
-            }
-            k = k + 1;
-            if ( k > 9){
-               k = k % 9;
-            }
-         }
-      }
+}
 
-      if (point > ans) ans =point;
-      return;
-      }
-      else {
-         return;
-      }
-   }
-   
-   if (index > 9) index = index % 9;
-   cout << arr[num]<<' ' << num+1 << ' ' << index << '\n'; 
-   arr[num+1] = index+1;
-   solve(index+1,num+1);
-   arr[num+1] = 0;
+void bfs(int x, int y){
+	
+	queue<pair<int,int>> q;
+	q.push(make_pair(x,y));
+	i_count = i_count + 1;
+	num_map[x][y] = i_count;
+	v[i_count-1].push_back(make_pair(x,y));
 
-   solve(index+1,num);
+	while(!q.empty()){
+		
+		int nx = q.front().first;
+		int ny = q.front().second;
+		q.pop();
 
-   return;
+		for(int i = 0; i<4; i++){
+			int nnx = nx + dx[i];
+			int nny = ny + dy[i];
+
+			if(map[nnx][nny]==1 && visit[nnx][nny] == 0){
+				q.push(make_pair(nnx,nny));
+				num_map[nnx][nny] = i_count;
+				visit[nnx][nny] = 1 ;
+				v[i_count-1].push_back(make_pair(nnx,nny));
+			}
+		}
+	}
 }
 
 int main() {
+	int T=1;
+	//cin >> T ;
+	for(int t =0; t <T ; t++){
+		cin >> N >> M ;
+		ans = 0;
 
-   cin >> N;
-   ans = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				cin >> map[i][j];
+			}
+		}
+	
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 1 && visit[i][j] == 0){
+					bfs(i,j);
+				}
+			}
+		}
+		
+		dfs(0,0,0,0);	
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				cout << num_map[i][j];
+			}
+			cout << '\n';	
+		}
 
-   for (int i = 0; i < N; i++) {
-      for (int j = 0; j < 9; j++) {
-         cin >> map[i][j];
-      }
-   }
-
-   for (int i = 1; i <= 9; i++) {
-      arr[1]=i;   
-      solve(i, 1);
-      arr[1]=0;
-   }
-
-   cout << ans;
+		//cout << '#' << t+1 << ' ' << ans << '\n';	
+	}
 }
