@@ -37,16 +37,20 @@ void dfs(int start_x, int start_y, int l, int sum){
 			
 			
 			for(int k = l; k<4; k++){
+				
 				int d_count = 0;
 				int flag = 0;
 				int nx = v[i][j].first;
 			int ny = v[i][j].second;	
 			int temp = num_map[nx][ny];
+			//cout << nx << ' '<<  ny << ' '<< k << ' '<<'\n';
 				while(1){
 					nx = nx + dx[i];
-					nx = ny + dy[i];
+					ny = ny + dy[i];
 					d_count = d_count + 1;
+					
 					if(num_map[nx][ny]>0 && num_map[nx][ny] != temp){			
+						
 						flag = 1;
 						break;
 					}
@@ -55,11 +59,14 @@ void dfs(int start_x, int start_y, int l, int sum){
 						break;
 					}
 					else if ( nx >= N || ny >=M || nx < 0 || ny <0){
+						
 						break;
-					}		
+					}	
+					
 				}
 				
 				if (d_count >= 2 && flag == 1){
+					cout << v[i][j].first << ' '<<  v[i][j].second << ' '<< k << ' '<<'\n';
 					if(link[temp][num_map[nx][ny]] == 0){
 						link[temp][num_map[nx][ny]] = 1;	
 						link[num_map[nx][ny]][temp] = 1;
@@ -69,8 +76,16 @@ void dfs(int start_x, int start_y, int l, int sum){
 								link[g][num_map[nx][ny]] = 1;
 							}
 						}
-
 						dfs(i,j,k+1,sum+d_count);
+						for(int g =0; g<i_count;g++){
+							if( link[temp][g]== 1){
+								link[num_map[nx][ny]][g] = 0;
+								link[g][num_map[nx][ny]] = 0;
+							}
+						}
+						
+						link[temp][num_map[nx][ny]] = 0;	
+						link[num_map[nx][ny]][temp] = 0;
 					}	
 				}
 			}
@@ -114,7 +129,7 @@ int main() {
 	//cin >> T ;
 	for(int t =0; t <T ; t++){
 		cin >> N >> M ;
-		ans = 0;
+		ans = 987654321;
 
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
@@ -139,6 +154,6 @@ int main() {
 			cout << '\n';	
 		}
 
-		//cout << '#' << t+1 << ' ' << ans << '\n';	
+		cout <<  ans << '\n';	
 	}
 }
