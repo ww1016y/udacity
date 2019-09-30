@@ -10,7 +10,12 @@ int check[6];
 int map[11][11];
 
 void solve(int num, int sum){
-
+/*	for(int i = 0; i < 10 ; i++){
+						for(int j = 0; j < 10 ; j++){
+							cout<<map[i][j];
+						}cout<<'\n';
+					}
+	cout<<'\n' ;*/
 	int xgame_flag = 0;
 	for(int j = 0; j < v.size(); j++){
 		int x = v[j].first;
@@ -23,6 +28,7 @@ void solve(int num, int sum){
 	if (xgame_flag == 0 ){
 		if (sum < ans){
 			ans = sum;
+			cout<<ans;
 		}
 		return;
 	}	
@@ -36,17 +42,18 @@ void solve(int num, int sum){
 			if (map[x][y] == 1){
 				int flag = 0;				
 				for(int k = 0; k <= i; k++){
-					if (x+k >= 10 || y+k >= 10) break;				
-					if (map[x+k][y] == 0) break;
-					if (map[x][y+k] == 0) break;
-					if (map[x+k][y+k] == 0) break;	
-
-					if (k == i) {
-//if (i==1) cout << i << ' ' << j << '\n';
-						flag = 1;
+					for(int p = 0; p <= i; p++){
+						if (x+k >= 10 || y+p >= 10) break;				
+						//if (map[x+k][y] == 0) break;
+						//if (map[x][y+p] == 0) break;
+						if (map[x+k][y+p] == 0) break;	
+						if (k == i) {
+							flag = 1;
+						}
 					}
 				}
 				if (flag == 1 && check[i+1] != 0 ){
+					
 					//int temp[10][10];
 					/*for(int i = 0; i < 10 ; i++){
 						for(int j = 0; j < 10 ; j++){
@@ -55,16 +62,16 @@ void solve(int num, int sum){
 					}*/
 
 					check[i+1] = check[i+1] - 1;
-					for(int k = 0; k <= i; k++){				
-						map[x+k][y] = 0;
-						map[x][y+k] = 0;
-						map[x+k][y+k] = 0;	
+					for(int k = 0; k <= i; k++){	
+						for(int p = 0; p <= i; p++){
+							map[x+k][y+p] = 0;
+						}
 					}
 					solve(num+1,sum+1);
-					for(int k = 0; k <= i; k++){				
-						map[x+k][y] = 1;
-						map[x][y+k] = 1;
-						map[x+k][y+k] = 1;	
+					for(int k = 0; k <= i; k++){	
+						for(int p = 0; p <= i; p++){
+							map[x+k][y+p] = 1;
+						}
 					}
 					check[i+1] = check[i+1] + 1;
 				}
