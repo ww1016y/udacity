@@ -8,14 +8,17 @@ vector <pair<int, int> > v;
 int ans=987654321;
 int check[6];
 int map[11][11];
-
+int f;
 void solve(int num, int sum){
-/*	for(int i = 0; i < 10 ; i++){
+	//cout << num;
+	for(int i = 0; i < 10 ; i++){
 						for(int j = 0; j < 10 ; j++){
-							cout<<map[i][j];
-						}cout<<'\n';
+							cout<< map[i][j];
+						}
+						cout<< '\n';
 					}
-	cout<<'\n' ;*/
+	cout<<'\n';
+	if(f == 1){return;}
 	int xgame_flag = 0;
 	for(int j = 0; j < v.size(); j++){
 		int x = v[j].first;
@@ -28,14 +31,23 @@ void solve(int num, int sum){
 	if (xgame_flag == 0 ){
 		if (sum < ans){
 			ans = sum;
-			cout<<ans;
+			f =1;
+		//	cout<<ans;
 		}
 		return;
 	}	
+	for(int i = 1; i<6;i++){
+		if(check[i] < 0) {
+		//	cout << i << ' ' ;
+			return;
+		}
+	}
+	
 
 	for(int i = 4; i >= 0; i--){
 //cout << i << ' ';
-		for(int j = num; j < v.size(); j++){
+		for(int j = 0; j < v.size(); j++){
+		//	cout << "num:"<<j << ' ' ;
 //cout << i << ' ' << j << '\n';
 			int x = v[j].first;
 			int y = v[j].second;		
@@ -43,16 +55,21 @@ void solve(int num, int sum){
 				int flag = 0;				
 				for(int k = 0; k <= i; k++){
 					for(int p = 0; p <= i; p++){
-						if (x+k >= 10 || y+p >= 10) break;				
+					//	cout << "x:"<<x+k<<"y:"<<y+p<<"map:"<<map[x+k][y+p] << ' ' ;
+						if (x+k >= 10 || y+p >= 10) {
+							flag = 1;
+							break;
+						}				
 						//if (map[x+k][y] == 0) break;
 						//if (map[x][y+p] == 0) break;
-						if (map[x+k][y+p] == 0) break;	
-						if (k == i) {
+						if (map[x+k][y+p] == 0) {
 							flag = 1;
-						}
+							break;
+						}	
 					}
+					if (flag == 1) break;
 				}
-				if (flag == 1 && check[i+1] != 0 ){
+				if (flag == 0 && check[i+1] >= 0 ){
 					
 					//int temp[10][10];
 					/*for(int i = 0; i < 10 ; i++){
@@ -67,6 +84,7 @@ void solve(int num, int sum){
 							map[x+k][y+p] = 0;
 						}
 					}
+				//	cout << "x:"<<x << "y:" << y <<' ' << "i:"<<i<<' ' << "ch:"<< check[i+1]<<' ' ;
 					solve(num+1,sum+1);
 					for(int k = 0; k <= i; k++){	
 						for(int p = 0; p <= i; p++){
